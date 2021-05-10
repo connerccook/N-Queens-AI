@@ -47,8 +47,10 @@ def process(n):
     nqueens.place(0)
     return nqueens.columns
 
-if __name__ == "_main_":
-    n = int(input("Enter the size of chess board\n"))
+if __name__ == "__main__":
+    #n = int(input("Enter the size of chess board\n"))
+    print("Enter the size of the chess board\n")
+    n = input()
     process(n)
 
 
