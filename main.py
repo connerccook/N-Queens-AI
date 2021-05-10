@@ -2,6 +2,7 @@ from geneticAlgo import *
 from NQueens import *
 from utils import *
 import pygame
+from nq1 import NQ
 n = 0
 
 def draw_board(the_board):
@@ -48,8 +49,8 @@ def process(n):
     return nqueens.columns
 
 if __name__ == "__main__":
-    #n = int(input("Enter the size of chess board\n"))
-    print("Enter the size of the chess board\n")
+    n = int(input("Enter the size of chess board\n"))
+    #print("Enter the size of the chess board\n")
     n = input()
     process(n)
 
