@@ -1,4 +1,6 @@
+from random import randint
 from utils import *
+
 
 def genetic_search(problem, ngen=1000, pmut=0.1, n=20):
     """Call genetic_algorithm on the appropriate parts of a problem.
@@ -7,14 +9,25 @@ def genetic_search(problem, ngen=1000, pmut=0.1, n=20):
 
     # NOTE: This is not tested and might not work.
     # TODO: Use this function to make Problems work with genetic_algorithm.
+    # TODO: auto generate problem states, n is the amount in the list
+    # TODO:rewrite h function to emphasize the maximum, works the opposite 
+    # TODO: scale ngen and pmut for each different queens problem
+    NSize = problem.N
+    gene_pool = range(NSize)
+    
+    #get population 
+    population = init_population(n, gene_pool, NSize-1)
 
-    s = problem.initial_state
-    states = [problem.result(s, a) for a in problem.actions(s)]
-    random.shuffle(states)
-    return genetic_algorithm(states[:n], problem.value, ngen, pmut)
+    #get fitness function
+    # fitness_fn = eval_func(NSize, population[0])
+    # print(fitness_fn)
 
+    #get f_thres
+    f_thres = NSize * (NSize-1)
+    
+    return genetic_algorithm(population, fitness_fn, gene_pool, f_thres, ngen, pmut)
 
-def genetic_algorithm(population, fitness_fn, gene_pool=[0, 1], f_thres=None, ngen=1000, pmut=0.1):
+def genetic_algorithm(population, fitness_fn, gene_pool, f_thres, ngen, pmut):
     """[Figure 4.8]"""
     for i in range(ngen):
         population = [mutate(recombine(*select(2, population, fitness_fn)), gene_pool, pmut)
@@ -86,3 +99,15 @@ def mutate(x, gene_pool, pmut):
 
     new_gene = gene_pool[r]
     return x[:c] + [new_gene] + x[c + 1:]
+
+def fitness_fn(NSize, candidate):
+    num_conflicts = 0
+    maxFitness = NSize * (NSize-1)
+    for (r1, c1) in enumerate(candidate):
+        for (r2, c2) in enumerate(candidate):
+            if (r1, c1) != (r2, c2):
+                num_conflicts += conflicts(r1, c1, r2, c2)
+    return maxFitness - num_conflicts
+
+def conflicts(row1, col1, row2, col2):
+    return (row1 == row2 or col1 == col2 or row1-col1 == row2 - col2 or row1 + col1 == row2 + col2)
