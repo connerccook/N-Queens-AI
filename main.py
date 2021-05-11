@@ -7,7 +7,7 @@ n = 0
 
 def draw_board(the_board):
     pygame.init()
-    colors = [(255,178,102), (255,255,255)]
+    colors = [(112,128,144), (47,79,79)]
     surface_sz = 480
     sq_sz = surface_sz // n
     surface_sz = n * sq_sz
