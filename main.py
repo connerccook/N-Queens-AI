@@ -10,7 +10,6 @@ size = 75  # size of a square in px
 bg_white = (50, 50, 50)  # chess black square bg color
 bg_black = (200, 200, 200)  # chessboard white square bg color
 
-
 def ask(screen):
     screen.fill(bg_black)
     pg.display.update()
@@ -38,8 +37,8 @@ def ask(screen):
 
 
 def drawSoln(screen, soln, posArray):
-    img = [pg.transform.scale(pg.image.load('queen.png'), (size, size))]
-    img.append(pg.transform.scale(pg.image.load('queen.png'), (size, size)))
+    img = [pg.transform.scale(pg.image.load('queen1.png'), (size, size))]
+    img.append(pg.transform.scale(pg.image.load('queen.jpg'), (size, size)))
     col = 0
     print(soln)
     for i in soln:
@@ -53,7 +52,7 @@ def drawSoln(screen, soln, posArray):
 def main():
     screen = pg.display.set_mode((1024, 600))
     pg.display.set_caption('Enter N:')
-    icon = pg.image.load('queen.png')
+    icon = pg.image.load('queen.jpg')
     pg.display.set_icon(icon)
     pg.display.update()
     n = int(ask(screen))
@@ -71,8 +70,8 @@ def main():
                 pg.draw.rect(screen, bg_white, (x * size, y * size, size, size))
         posArray.append(tempPos)
 
-    solution = depth_first_tree_search(NQueensProblem(10)).solution()
-    print(solution)
+    solution = depth_first_tree_search(NQueensProblem(n)).solution()
+
     if solution:
         drawSoln(screen, solution, posArray)
     else:
