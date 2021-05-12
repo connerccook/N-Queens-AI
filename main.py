@@ -13,12 +13,19 @@ board = [
     [0,0,0,0,0,0,0,0]
 ]
 
+board = [
+    [0,0,0,0], 
+    [0,0,0,0], 
+    [0,0,0,0], 
+    [0,0,0,0]
+    ]
+
 if __name__ == "__main__":
-    n = 8
     solution = (7, 3, 0, 2, 5, 1, 6, 4)
-    n = 8
+    n = 4
     nqp = NQueensProblem(n)
-    solution = genetic_search(nqp).solution()
+    solution = genetic_search(nqp)
+    print(solution)
     
     #7 will be row 1 column 0
     #3 will be row 5 column 1

@@ -16,7 +16,7 @@ def genetic_search(problem, ngen=1000, pmut=0.1, n=20):
     gene_pool = range(NSize)
     
     #get population 
-    population = init_population(n, gene_pool, NSize-1)
+    population = init_population(n, gene_pool, NSize)
 
     #get fitness function
     # fitness_fn = eval_func(NSize, population[0])
@@ -25,9 +25,9 @@ def genetic_search(problem, ngen=1000, pmut=0.1, n=20):
     #get f_thres
     f_thres = NSize * (NSize-1)
     
-    return genetic_algorithm(population, fitness_fn, gene_pool, f_thres, ngen, pmut)
+    return genetic_algorithm(population, fitness_fn, gene_pool, f_thres, ngen, pmut, NSize)
 
-def genetic_algorithm(population, fitness_fn, gene_pool, f_thres, ngen, pmut):
+def genetic_algorithm(population, fitness_fn, gene_pool, f_thres, ngen, pmut, NSize):
     """[Figure 4.8]"""
     for i in range(ngen):
         population = [mutate(recombine(*select(2, population, fitness_fn)), gene_pool, pmut)
@@ -100,9 +100,9 @@ def mutate(x, gene_pool, pmut):
     new_gene = gene_pool[r]
     return x[:c] + [new_gene] + x[c + 1:]
 
-def fitness_fn(NSize, candidate):
+def fitness_fn(candidate):
     num_conflicts = 0
-    maxFitness = NSize * (NSize-1)
+    maxFitness = len(candidate) * (len(candidate)-1)
     for (r1, c1) in enumerate(candidate):
         for (r2, c2) in enumerate(candidate):
             if (r1, c1) != (r2, c2):
