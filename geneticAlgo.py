@@ -1,26 +1,28 @@
 from random import randint
 from utils import *
+from time import time
+
+def performance(fn):
+  def wrapper(*args, **kwargs):
+    t1 = time()
+    result = fn(*args, **kwargs)
+    t2 = time()
+    print(f'This function took {t2-t1} s to run')
+    return result
+  return wrapper
 
 
+@performance
 def genetic_search(problem, ngen=1000, pmut=0.1, n=20):
     """Call genetic_algorithm on the appropriate parts of a problem.
     This requires the problem to have states that can mate and mutate,
     plus a value method that scores states."""
 
-    # NOTE: This is not tested and might not work.
-    # TODO: Use this function to make Problems work with genetic_algorithm.
-    # TODO: auto generate problem states, n is the amount in the list
-    # TODO:rewrite h function to emphasize the maximum, works the opposite
-    # TODO: scale ngen and pmut for each different queens problem
     NSize = problem.N
     gene_pool = range(NSize)
 
     # get population
-    population = init_population(n, gene_pool, NSize - 1)
-
-    # get fitness function
-    # fitness_fn = eval_func(NSize, population[0])
-    # print(fitness_fn)
+    population = init_population(n, gene_pool, NSize)
 
     # get f_thres
     f_thres = NSize * (NSize - 1)
@@ -30,14 +32,16 @@ def genetic_search(problem, ngen=1000, pmut=0.1, n=20):
 
 def genetic_algorithm(population, fitness_fn, gene_pool, f_thres, ngen, pmut):
     """[Figure 4.8]"""
+    iterations = 0
     for i in range(ngen):
         population = [mutate(recombine(*select(2, population, fitness_fn)), gene_pool, pmut)
                       for i in range(len(population))]
-
+        iterations+=1
         fittest_individual = fitness_threshold(fitness_fn, f_thres, population)
         if fittest_individual:
+            print(f"Number of iterations: {iterations}")
             return fittest_individual
-
+    print(f"Hit maximum amount of generations of {ngen}")
     return max(population, key=fitness_fn)
 
 
@@ -102,9 +106,10 @@ def mutate(x, gene_pool, pmut):
     return x[:c] + [new_gene] + x[c + 1:]
 
 
-def fitness_fn(NSize, candidate):
+def fitness_fn(candidate):
     num_conflicts = 0
-    maxFitness = NSize * (NSize - 1)
+    size = len(candidate)
+    maxFitness = size * (size - 1)
     for (r1, c1) in enumerate(candidate):
         for (r2, c2) in enumerate(candidate):
             if (r1, c1) != (r2, c2):
@@ -114,3 +119,6 @@ def fitness_fn(NSize, candidate):
 
 def conflicts(row1, col1, row2, col2):
     return (row1 == row2 or col1 == col2 or row1 - col1 == row2 - col2 or row1 + col1 == row2 + col2)
+
+
+

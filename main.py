@@ -70,7 +70,7 @@ def main():
                 pg.draw.rect(screen, bg_white, (x * size, y * size, size, size))
         posArray.append(tempPos)
 
-    solution = depth_first_tree_search(NQueensProblem(n)).solution()
+    solution = genetic_search(NQueensProblem(n))
 
     if solution:
         drawSoln(screen, solution, posArray)
